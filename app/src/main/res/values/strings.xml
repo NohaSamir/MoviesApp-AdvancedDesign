@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Movies ( Advanced )</string>
+    <string name="history">History</string>
+    <string name="drama">Drama</string>
+    <string name="action">Action</string>
+    <string name="buy_ticket">Buy Ticket</string>
+    <string name="actors">Actors</string>
+    <string name="introduction">Introduction</string>
+    <string name="director">Director / %s</string>
+    <string name="background">background</string>
+</resources>
