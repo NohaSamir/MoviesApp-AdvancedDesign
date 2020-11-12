@@ -4,8 +4,8 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.noha.moviesadvanced.model.Movie
 import com.noha.moviesadvanced.databinding.ItemMovieBinding
+import com.noha.moviesadvanced.model.Movie
 
 
 class MovieAdapter(
@@ -39,7 +39,6 @@ class MovieAdapter(
         private val interaction: Interaction?
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        private var lastSelectedItemBinding: ItemMovieBinding? = null
 
         fun bind(item: Movie) = with(itemView) {
             binding.movie = item
@@ -65,6 +64,7 @@ class MovieAdapter(
 
             })
 
+            //Notify the listener on movie item click
             itemView.setOnClickListener {
                 interaction?.onItemSelected(adapterPosition, item, binding)
             }

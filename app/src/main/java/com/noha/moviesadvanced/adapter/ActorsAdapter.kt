@@ -3,8 +3,8 @@ package com.noha.moviesadvanced.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.noha.moviesadvanced.model.Actor
 import com.noha.moviesadvanced.databinding.ItemActorBinding
+import com.noha.moviesadvanced.model.Actor
 
 class ActorsAdapter(private val list: List<Actor>) :
     RecyclerView.Adapter<ActorsAdapter.ActorViewHolder>() {
@@ -30,7 +30,7 @@ class ActorsAdapter(private val list: List<Actor>) :
 
     class ActorViewHolder
     constructor(
-        val binding: ItemActorBinding,
+        private val binding: ItemActorBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Actor) = with(itemView) {

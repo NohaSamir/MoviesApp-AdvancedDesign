@@ -16,6 +16,9 @@ import com.noha.moviesadvanced.model.getDummyListOfMovies
 import com.noha.moviesadvanced.util.CenterZoomLayoutManager
 import com.noha.moviesadvanced.util.loadImage
 
+
+/* ToDo: FUNCTIONS SHOULD DO ONE THING. THEY SHOULD DO IT WELL. THEY SHOULD DO IT ONLY.*/
+
 class MainActivity : AppCompatActivity(), MovieAdapter.Interaction {
 
     private lateinit var mainBinding: ActivityMainBinding
@@ -24,17 +27,15 @@ class MainActivity : AppCompatActivity(), MovieAdapter.Interaction {
     private var lastVisibleItemWhiteBoarder: ConstraintLayout? = null
     private var lastSelectedItemBinding: ItemMovieBinding? = null
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        //Bind view using data binding
         mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
+        //Setup recyclerView
         layoutManager = CenterZoomLayoutManager(this)
         mainBinding.recyclerView.layoutManager = layoutManager
-
-        adapter = MovieAdapter(getDummyListOfMovies(), this)
-        mainBinding.recyclerView.adapter = adapter
 
         val pagerSnapHelper = PagerSnapHelper()
         pagerSnapHelper.attachToRecyclerView(mainBinding.recyclerView)
@@ -54,10 +55,18 @@ class MainActivity : AppCompatActivity(), MovieAdapter.Interaction {
                 }
             }
         })
+
+        //Display Movie List
+        bindMovieList()
+    }
+
+    private fun bindMovieList() {
+        adapter = MovieAdapter(getDummyListOfMovies(), this)
+        mainBinding.recyclerView.adapter = adapter
     }
 
     override fun onItemSelected(position: Int, item: Movie, binding: ItemMovieBinding) {
-        //Hide details when click on another item
+        //Hide last selected item details
         lastSelectedItemBinding?.let { displayMovieDetails(it, false) }
 
         //Display selected item details
@@ -70,7 +79,8 @@ class MainActivity : AppCompatActivity(), MovieAdapter.Interaction {
         changeTransparentOfFocusedItem(view)
 
         //Change background image
-        loadImage(mainBinding.backgroundImageView, movie.poster)
+        changeBackgroundImage(movie)
+
     }
 
     private fun displayMovieDetails(binding: ItemMovieBinding, show: Boolean) {
@@ -97,5 +107,8 @@ class MainActivity : AppCompatActivity(), MovieAdapter.Interaction {
         lastVisibleItemWhiteBoarder = whiteImageView
     }
 
+    private fun changeBackgroundImage(movie: Movie) {
+        loadImage(mainBinding.backgroundImageView, movie.poster)
+    }
 
 }
