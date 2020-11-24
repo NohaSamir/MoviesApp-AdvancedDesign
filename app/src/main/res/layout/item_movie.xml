@@ -9,7 +9,7 @@
 
         <variable
             name="movie"
-            type="com.noha.moviesadvanced.model.Movie" />
+            type="com.noha.moviesadvanced.domain.model.Movie" />
 
         <variable
             name="isDetailsVisible"
@@ -125,7 +125,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:rating="4"
+            android:rating="@{movie.rate}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="packed"

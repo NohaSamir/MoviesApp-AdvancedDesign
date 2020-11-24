@@ -8,4 +8,6 @@
     <string name="introduction">Introduction</string>
     <string name="director">Director / %s</string>
     <string name="background">background</string>
+    <string name="no_internet">No Internet Connection</string>
+    <string name="something_went_wrong">Something went wrong</string>
 </resources>

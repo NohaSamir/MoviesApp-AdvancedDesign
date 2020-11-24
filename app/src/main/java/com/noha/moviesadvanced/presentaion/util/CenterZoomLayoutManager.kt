@@ -1,4 +1,4 @@
-package com.noha.moviesadvanced.util
+package com.noha.moviesadvanced.presentaion.util
 
 import android.content.Context
 import android.view.View
@@ -12,6 +12,17 @@ class CenterZoomLayoutManager(
     private val mShrinkDistance: Float = 0.9f,
     private val mShrinkAmount: Float = 0.15f
 ) : LinearLayoutManager(context, HORIZONTAL, false) {
+
+    private var isScrollEnabled = true
+
+    fun setScrollEnabled(flag: Boolean) {
+        isScrollEnabled = flag
+    }
+
+    override fun canScrollHorizontally(): Boolean {
+        //Similarly you can customize "canScrollHorizontally()" for managing horizontal scroll
+        return isScrollEnabled && super.canScrollHorizontally()
+    }
 
     override fun onLayoutCompleted(state: RecyclerView.State?) {
         super.onLayoutCompleted(state)

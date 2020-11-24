@@ -1,20 +1,23 @@
-package com.noha.moviesadvanced.ui
+package com.noha.moviesadvanced.presentaion.ui
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.noha.moviesadvanced.R
-import com.noha.moviesadvanced.adapter.MovieAdapter
+import com.noha.moviesadvanced.data.source.network.model.ResponseWrapper
+import com.noha.moviesadvanced.data.source.repository.moviesRepository
 import com.noha.moviesadvanced.databinding.ActivityMainBinding
 import com.noha.moviesadvanced.databinding.ItemMovieBinding
-import com.noha.moviesadvanced.model.Movie
-import com.noha.moviesadvanced.model.getDummyListOfMovies
-import com.noha.moviesadvanced.util.CenterZoomLayoutManager
-import com.noha.moviesadvanced.util.loadImage
+import com.noha.moviesadvanced.domain.model.Movie
+import com.noha.moviesadvanced.presentaion.adapter.MovieAdapter
+import com.noha.moviesadvanced.presentaion.util.CenterZoomLayoutManager
+import com.noha.moviesadvanced.presentaion.util.loadImage
+import com.noha.moviesadvanced.presentaion.util.showErrorSnackBar
 
 
 /* ToDo: FUNCTIONS SHOULD DO ONE THING. THEY SHOULD DO IT WELL. THEY SHOULD DO IT ONLY.*/
@@ -26,6 +29,10 @@ class MainActivity : AppCompatActivity(), MovieAdapter.Interaction {
     private lateinit var adapter: MovieAdapter
     private var lastVisibleItemWhiteBoarder: ConstraintLayout? = null
     private var lastSelectedItemBinding: ItemMovieBinding? = null
+
+    private val viewModel: MainViewModel by viewModels {
+        MainViewModel.Factory(moviesRepository)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +47,32 @@ class MainActivity : AppCompatActivity(), MovieAdapter.Interaction {
         val pagerSnapHelper = PagerSnapHelper()
         pagerSnapHelper.attachToRecyclerView(mainBinding.recyclerView)
 
+        adapter = MovieAdapter(interaction = this)
+        mainBinding.recyclerView.adapter = adapter
+
+        //Bind Movie List
+        viewModel.moviesResponse.observe(this, {
+            if (it is ResponseWrapper.Success) {
+                bindMovieList(it.value)
+            } else {
+                showErrorSnackBar(mainBinding.root, it)
+            }
+        })
+
+        viewModel.selectedMovieDetails.observe(this, { movieDetailsResponse ->
+            //if movie details still visible bind it's details
+            lastSelectedItemBinding?.let {
+                if (movieDetailsResponse is ResponseWrapper.Success) {
+                    adapter.bindMissingData(movieDetailsResponse.value, lastSelectedItemBinding!!)
+                } else {
+                    showErrorSnackBar(mainBinding.root, movieDetailsResponse)
+                }
+            }
+        })
+    }
+
+    private fun bindMovieList(movies: List<Movie>) {
+        adapter.submitList(movies)
         mainBinding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -50,28 +83,35 @@ class MainActivity : AppCompatActivity(), MovieAdapter.Interaction {
                     val visibleView: View? = layoutManager.findViewByPosition(visiblePosition)
 
                     visibleView?.let {
-                        onFocusedItemChange(getDummyListOfMovies()[visiblePosition], it)
+                        onFocusedItemChange(movies[visiblePosition], it)
                     }
                 }
             }
         })
-
-        //Display Movie List
-        bindMovieList()
     }
 
-    private fun bindMovieList() {
-        adapter = MovieAdapter(getDummyListOfMovies(), this)
-        mainBinding.recyclerView.adapter = adapter
+    override fun onItemSelected(position: Int, movie: Movie, viewBinding: ItemMovieBinding) {
+
+        //Get movie actors and director
+        viewModel.getMovieDetails(movie)
+
+        //Display movie details UI
+        adapter.displayMovieDetails(viewBinding, true)
+
+        //Disable recycler view on movie details appear to avoid bind in wrong view
+        layoutManager.setScrollEnabled(false)
+
+        lastSelectedItemBinding = viewBinding
     }
 
-    override fun onItemSelected(position: Int, item: Movie, binding: ItemMovieBinding) {
-        //Hide last selected item details
-        lastSelectedItemBinding?.let { displayMovieDetails(it, false) }
-
-        //Display selected item details
-        if (lastSelectedItemBinding != binding)
-            displayMovieDetails(binding, true)
+    override fun onBackPressed() {
+        if (lastSelectedItemBinding != null) {
+            adapter.displayMovieDetails(lastSelectedItemBinding!!, false)
+            layoutManager.setScrollEnabled(true)
+            lastSelectedItemBinding = null
+            return
+        }
+        super.onBackPressed()
     }
 
     private fun onFocusedItemChange(movie: Movie, view: View) {
@@ -81,21 +121,6 @@ class MainActivity : AppCompatActivity(), MovieAdapter.Interaction {
         //Change background image
         changeBackgroundImage(movie)
 
-    }
-
-    private fun displayMovieDetails(binding: ItemMovieBinding, show: Boolean) {
-        //Hide Image
-        val params = binding.posterGuideline.layoutParams as ConstraintLayout.LayoutParams
-        if (show) params.guidePercent = 0.0f
-        else params.guidePercent = 0.6f
-        binding.posterGuideline.layoutParams = params
-
-        //Display Movie Details
-        binding.isDetailsVisible = show
-
-        //ToDo: Scale white board
-
-        lastSelectedItemBinding = binding
     }
 
     private fun changeTransparentOfFocusedItem(view: View) {
@@ -108,7 +133,6 @@ class MainActivity : AppCompatActivity(), MovieAdapter.Interaction {
     }
 
     private fun changeBackgroundImage(movie: Movie) {
-        loadImage(mainBinding.backgroundImageView, movie.poster)
+        loadImage(mainBinding.backgroundImageView, movie.backdropPath)
     }
-
 }

@@ -1,10 +1,10 @@
-package com.noha.moviesadvanced.adapter
+package com.noha.moviesadvanced.presentaion.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.noha.moviesadvanced.databinding.ItemActorBinding
-import com.noha.moviesadvanced.model.Actor
+import com.noha.moviesadvanced.domain.model.Actor
 
 class ActorsAdapter(private val list: List<Actor>) :
     RecyclerView.Adapter<ActorsAdapter.ActorViewHolder>() {

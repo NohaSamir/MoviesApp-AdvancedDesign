@@ -6,7 +6,7 @@
     <data>
         <variable
             name="movie"
-            type="com.noha.moviesadvanced.model.Movie" />
+            type="com.noha.moviesadvanced.domain.model.Movie" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

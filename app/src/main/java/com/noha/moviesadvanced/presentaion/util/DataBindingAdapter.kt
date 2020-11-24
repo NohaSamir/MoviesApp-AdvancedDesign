@@ -1,17 +1,17 @@
-package com.noha.moviesadvanced.util
+package com.noha.moviesadvanced.presentaion.util
 
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
+import com.noha.moviesadvanced.Constant
 
-const val IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500"
 
 @BindingAdapter("loadImageUrl")
 fun loadImage(imageView: ImageView, url: String?) {
 
-    url?.let {
+    if (!url.isNullOrBlank()) {
         Glide.with(imageView)
-            .load(IMAGE_BASE_URL + url)
+            .load(Constant.IMAGE_BASE_URL + url)
             .into(imageView)
     }
 }

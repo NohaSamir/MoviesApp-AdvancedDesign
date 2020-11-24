@@ -7,7 +7,7 @@
 
         <variable
             name="actor"
-            type="com.noha.moviesadvanced.model.Actor" />
+            type="com.noha.moviesadvanced.domain.model.Actor" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -28,8 +28,8 @@
                 loadImageUrl="@{actor.photoUrl}"
                 android:layout_width="@dimen/actor_image_size"
                 android:layout_height="@dimen/actor_image_size"
-                tools:srcCompat="@tools:sample/avatars"
-                android:scaleType="centerCrop"/>
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_profile_24"/>
         </androidx.cardview.widget.CardView>
 
         <TextView
