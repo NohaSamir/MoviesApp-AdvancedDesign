@@ -1,9 +1,7 @@
 package com.noha.moviesadvanced.presentaion.adapter
 
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -43,8 +41,11 @@ class MovieAdapter(
     }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
-        val item = getItem(position)
-        holder.bind(item)
+        val movie = getItem(position)
+        val previousMovie = if (position == 0) getItem(itemCount - 1) else getItem(position - 1)
+        val nextMovie = if (position == itemCount - 1) getItem(0) else getItem(position + 1)
+
+        holder.bind(movie, previousMovie, nextMovie)
     }
 
     class MovieViewHolder
@@ -54,59 +55,20 @@ class MovieAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
 
 
-        fun bind(item: Movie) = with(itemView) {
-            binding.movie = item
+        fun bind(movie: Movie, previousMovie: Movie, nextMovie: Movie) = with(itemView) {
+            binding.movie = movie
             binding.executePendingBindings()
 
             //Notify the listener on movie item click
             itemView.setOnClickListener {
-                interaction?.onItemSelected(adapterPosition, item, binding)
+                interaction?.onItemSelected(movie, previousMovie.poster, nextMovie.poster)
             }
         }
 
     }
 
     interface Interaction {
-        fun onItemSelected(position: Int, movie: Movie, viewBinding: ItemMovieBinding)
-    }
-
-    fun displayMovieDetails(binding: ItemMovieBinding, show: Boolean) {
-        //Hide Image
-        val params = binding.posterGuideline.layoutParams as ConstraintLayout.LayoutParams
-        if (show) params.guidePercent = 0.0f
-        else params.guidePercent = 0.6f
-        binding.posterGuideline.layoutParams = params
-
-        //Display Movie Details
-        binding.isDetailsVisible = show
-
-        //ToDo: Scale white board
-    }
-
-    fun bindMissingData(movie: Movie, viewBinding: ItemMovieBinding) {
-        viewBinding.movie = movie
-
-        movie.actors?.let {
-            //Bind Actors list and enable nested scroll
-            viewBinding.detailsView.actorsRecyclerView.adapter = ActorsAdapter(it)
-            viewBinding.detailsView.actorsRecyclerView.addOnItemTouchListener(object :
-                RecyclerView.OnItemTouchListener {
-                override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
-                    when (e.action) {
-                        MotionEvent.ACTION_MOVE -> rv.parent.requestDisallowInterceptTouchEvent(true)
-                    }
-                    return false
-                }
-
-                override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {
-
-                }
-
-                override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {
-                }
-
-            })
-        }
+        fun onItemSelected(movie: Movie, previousMoviePoster: String, nextMoviePoster: String)
     }
 }
 

@@ -1,10 +1,11 @@
 package com.noha.moviesadvanced.data.source.network.model
 
-import com.squareup.moshi.Json
+import com.google.gson.annotations.SerializedName
+
 
 data class ErrorResponse(
-    @Json(name = "status_code")
+    @SerializedName("status_code")
     val code: Int,
-    @Json(name = "status_message")
+    @SerializedName("status_message")
     val message: String
 )

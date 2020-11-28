@@ -15,14 +15,6 @@ class CenterZoomLayoutManager(
 
     private var isScrollEnabled = true
 
-    fun setScrollEnabled(flag: Boolean) {
-        isScrollEnabled = flag
-    }
-
-    override fun canScrollHorizontally(): Boolean {
-        //Similarly you can customize "canScrollHorizontally()" for managing horizontal scroll
-        return isScrollEnabled && super.canScrollHorizontally()
-    }
 
     override fun onLayoutCompleted(state: RecyclerView.State?) {
         super.onLayoutCompleted(state)

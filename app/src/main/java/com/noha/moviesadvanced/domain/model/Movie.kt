@@ -1,5 +1,9 @@
 package com.noha.moviesadvanced.domain.model
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 data class Movie(
     val id: Int,
     val title: String,
@@ -9,4 +13,4 @@ data class Movie(
     val rate: Float = 0.9f,
     var director: String = "",
     var actors: List<Actor>? = null
-)
+) : Parcelable

@@ -28,8 +28,9 @@
                 loadImageUrl="@{actor.photoUrl}"
                 android:layout_width="@dimen/actor_image_size"
                 android:layout_height="@dimen/actor_image_size"
+                android:contentDescription="@string/poster"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_profile_24"/>
+                android:src="@drawable/ic_profile_24" />
         </androidx.cardview.widget.CardView>
 
         <TextView
