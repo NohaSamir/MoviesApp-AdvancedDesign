@@ -48,8 +48,12 @@ class MoviesViewModel(private val repository: MoviesRepository) : ViewModel() {
         }
     }
 
-    fun currentMovieChanged(movieIndex: Int) {
+    fun onCurrentMovieChanged(movieIndex: Int) {
         _currentMovie.value = moviesList.value?.get(movieIndex)
+    }
+
+    fun onErrorMsgDisplay() {
+        _error.value = null
     }
 
     class Factory constructor(private val repository: MoviesRepository) :

@@ -30,6 +30,10 @@ class MovieDetailsViewModel(
         }
     }
 
+    fun onErrorMsgDisplay() {
+        _error.value = null
+    }
+
     class Factory constructor(private val movie: Movie, private val repository: MoviesRepository) :
         ViewModelProvider.Factory {
 

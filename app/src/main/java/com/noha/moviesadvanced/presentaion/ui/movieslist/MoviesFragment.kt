@@ -47,6 +47,7 @@ class MoviesFragment : Fragment(), MovieAdapter.Interaction {
         //Bind Movie List
         viewModel.error.observe(viewLifecycleOwner, {
             showErrorSnackBar(mainBinding.root, it)
+            viewModel.onErrorMsgDisplay()
         })
 
         return mainBinding.root
@@ -75,7 +76,7 @@ class MoviesFragment : Fragment(), MovieAdapter.Interaction {
                     val visibleView: View? = layoutManager.findViewByPosition(visiblePosition)
 
                     visibleView?.let {
-                        viewModel.currentMovieChanged(visiblePosition)
+                        viewModel.onCurrentMovieChanged(visiblePosition)
                         changeTransparentOfFocusedItem(visibleView)
                     }
                 }

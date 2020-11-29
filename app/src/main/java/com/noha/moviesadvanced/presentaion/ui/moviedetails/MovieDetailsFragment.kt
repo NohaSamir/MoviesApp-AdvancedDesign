@@ -33,6 +33,7 @@ class MovieDetailsFragment : Fragment() {
 
         viewModel.error.observe(viewLifecycleOwner, {
             showErrorSnackBar(mBinding.root, it)
+            viewModel.onErrorMsgDisplay()
         })
         return mBinding.root
     }
