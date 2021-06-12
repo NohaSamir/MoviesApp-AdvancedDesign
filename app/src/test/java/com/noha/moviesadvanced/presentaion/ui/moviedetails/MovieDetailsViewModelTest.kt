@@ -1,4 +1,4 @@
-package com.noha.moviesadvanced.presentaion.ui.movieslist
+package com.noha.moviesadvanced.presentaion.ui.moviedetails
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.noha.moviesadvanced.data.source.network.model.ErrorResponse
@@ -6,7 +6,7 @@ import com.noha.moviesadvanced.data.source.network.model.ResponseWrapper
 import com.noha.moviesadvanced.domain.model.Actor
 import com.noha.moviesadvanced.domain.model.Movie
 import com.noha.moviesadvanced.domain.repository.MoviesRepository
-import com.noha.moviesadvanced.presentaion.ui.moviedetails.MovieDetailsViewModel
+import com.noha.moviesadvanced.presentaion.ui.movieslist.MoviesViewModel
 import com.noha.moviesadvanced.utils.CoroutineTestRule
 import com.noha.moviesadvanced.utils.getOrAwaitValue
 import io.mockk.clearAllMocks
