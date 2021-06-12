@@ -1,46 +1,56 @@
 package com.noha.moviesadvanced.presentaion.ui.moviedetails
 
-import androidx.lifecycle.*
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.noha.moviesadvanced.data.source.network.model.ResponseWrapper
 import com.noha.moviesadvanced.domain.model.Movie
 import com.noha.moviesadvanced.domain.repository.MoviesRepository
+import com.noha.moviesadvanced.presentaion.ui.BaseViewModel
 import kotlinx.coroutines.launch
 
 class MovieDetailsViewModel(
     movie: Movie,
+    val previousImage: String,
+    val nextImage: String,
     private val repository: MoviesRepository
-) : ViewModel() {
+) : BaseViewModel() {
 
     val movieDetails: MutableLiveData<Movie> = MutableLiveData(movie)
-
-    val error: LiveData<ResponseWrapper<Any>>
-        get() = _error
-    private val _error: MutableLiveData<ResponseWrapper<Any>> = MutableLiveData()
 
     init {
         getMovieDetails(movie)
     }
 
     private fun getMovieDetails(movie: Movie) {
+        _isLoading.value = true
         viewModelScope.launch {
             when (val response = repository.getMovieCast(movie)) {
-                is ResponseWrapper.Success -> movieDetails.postValue(response.value)
-                else -> _error.postValue(response)
+                is ResponseWrapper.Success -> movieDetails.postValue(response.value as Movie?)
+                else -> onResponseError(response)
             }
+            _isLoading.value = false
         }
     }
 
-    fun onErrorMsgDisplay() {
-        _error.value = null
-    }
-
-    class Factory constructor(private val movie: Movie, private val repository: MoviesRepository) :
+    class Factory constructor(
+        private val movie: Movie,
+        private val previousImage: String,
+        private val nextImage: String,
+        private val repository: MoviesRepository
+    ) :
         ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return if (modelClass.isAssignableFrom(MovieDetailsViewModel::class.java)) {
-                MovieDetailsViewModel(movie, this.repository) as T
+                MovieDetailsViewModel(
+                    movie,
+                    previousImage,
+                    nextImage,
+                    this.repository
+                ) as T
             } else {
                 throw IllegalArgumentException("ViewModel Not Found")
             }

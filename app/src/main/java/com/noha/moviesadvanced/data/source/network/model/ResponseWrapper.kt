@@ -7,5 +7,5 @@ sealed class ResponseWrapper<out T> {
     data class GenericError(val code: Int? = null, val error: ErrorResponse? = null) :
         ResponseWrapper<Nothing>()
 
-    object NetworkError : ResponseWrapper<Nothing>()
+    data class NetworkError(val message: String) : ResponseWrapper<Nothing>()
 }

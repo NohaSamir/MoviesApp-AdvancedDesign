@@ -52,9 +52,8 @@ suspend fun <T> safeApiCall(
                     val errorResponse = convertErrorBody(throwable)
                     ResponseWrapper.GenericError(code, errorResponse)
                 }
-                is IOException -> ResponseWrapper.NetworkError
                 else -> {
-                    ResponseWrapper.GenericError(null, null)
+                    ResponseWrapper.NetworkError(throwable.message ?: "Something went wrong.")
                 }
             }
         }

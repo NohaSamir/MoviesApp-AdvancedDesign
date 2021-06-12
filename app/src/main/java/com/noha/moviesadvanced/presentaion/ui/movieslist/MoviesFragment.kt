@@ -16,7 +16,6 @@ import com.noha.moviesadvanced.databinding.MoviesFragmentBinding
 import com.noha.moviesadvanced.domain.model.Movie
 import com.noha.moviesadvanced.presentaion.adapter.MovieAdapter
 import com.noha.moviesadvanced.presentaion.util.CenterZoomLayoutManager
-import com.noha.moviesadvanced.presentaion.util.showErrorSnackBar
 
 
 /* ToDo: FUNCTIONS SHOULD DO ONE THING. THEY SHOULD DO IT WELL. THEY SHOULD DO IT ONLY.*/
@@ -43,12 +42,6 @@ class MoviesFragment : Fragment(), MovieAdapter.Interaction {
         mainBinding.lifecycleOwner = this
 
         setUpRecyclerView()
-
-        //Bind Movie List
-        viewModel.error.observe(viewLifecycleOwner, {
-            showErrorSnackBar(mainBinding.root, it)
-            viewModel.onErrorMsgDisplay()
-        })
 
         return mainBinding.root
     }

@@ -2,4 +2,6 @@
 <resources>
     <dimen name="corner_radius">30dp</dimen>
     <dimen name="actor_image_size">150dp</dimen>
+    <dimen name="movie_type_width">60dp</dimen>
+    <dimen name="movie_type_font_size">12sp</dimen>
 </resources>

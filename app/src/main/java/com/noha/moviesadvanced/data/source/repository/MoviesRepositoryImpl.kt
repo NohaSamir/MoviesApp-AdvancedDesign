@@ -22,7 +22,7 @@ class MoviesRepositoryImpl(
 ) : MoviesRepository {
 
 
-    override suspend fun getMovieList(pageNum: Int): ResponseWrapper<List<Movie>> {
+    override suspend fun getMovieList(pageNum: Int): ResponseWrapper<Any> {
         return withContext(dispatcher) {
             val response = safeApiCall {
                 moviesAPIs.getPopularMoviesAsync(page = pageNum)
@@ -31,20 +31,15 @@ class MoviesRepositoryImpl(
                 is ResponseWrapper.Success -> {
                     return@withContext ResponseWrapper.Success(response.value.results.toDomainModel())
                 }
-                is ResponseWrapper.GenericError -> return@withContext ResponseWrapper.GenericError(
-                    response.code,
-                    response.error
-                )
-                else -> return@withContext ResponseWrapper.NetworkError
+                else -> return@withContext response
             }
         }
     }
 
-
     /**
      * Get movie director and actors
      */
-    override suspend fun getMovieCast(movie: Movie): ResponseWrapper<Movie> {
+    override suspend fun getMovieCast(movie: Movie): ResponseWrapper<Any> {
         return withContext(dispatcher) {
             val response = safeApiCall {
                 moviesAPIs.getMovieCastAndCrewAsync(movie.id)
@@ -62,11 +57,8 @@ class MoviesRepositoryImpl(
 
                     return@withContext ResponseWrapper.Success(movie)
                 }
-                is ResponseWrapper.GenericError -> return@withContext ResponseWrapper.GenericError(
-                    response.code,
-                    response.error
-                )
-                else -> return@withContext ResponseWrapper.NetworkError
+
+                else -> return@withContext response
             }
         }
     }

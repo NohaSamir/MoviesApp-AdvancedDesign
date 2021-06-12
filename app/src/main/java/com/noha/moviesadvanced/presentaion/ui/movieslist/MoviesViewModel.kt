@@ -4,10 +4,11 @@ import androidx.lifecycle.*
 import com.noha.moviesadvanced.data.source.network.model.ResponseWrapper
 import com.noha.moviesadvanced.domain.model.Movie
 import com.noha.moviesadvanced.domain.repository.MoviesRepository
+import com.noha.moviesadvanced.presentaion.ui.BaseViewModel
 import kotlinx.coroutines.launch
 
 
-class MoviesViewModel(private val repository: MoviesRepository) : ViewModel() {
+class MoviesViewModel(private val repository: MoviesRepository) : BaseViewModel() {
 
     private var pageNumber: Int = 1
 
@@ -15,34 +16,25 @@ class MoviesViewModel(private val repository: MoviesRepository) : ViewModel() {
         get() = _moviesList
     private val _moviesList: MutableLiveData<List<Movie>> = MutableLiveData()
 
-    val error: LiveData<ResponseWrapper<Any>>
-        get() = _error
-    private val _error: MutableLiveData<ResponseWrapper<Any>> = MutableLiveData()
-
-    val isLoading: LiveData<Boolean>
-        get() = _isLoading
-    private val _isLoading: MutableLiveData<Boolean> = MutableLiveData()
-
     val currentMovie: LiveData<Movie>
         get() = _currentMovie
     private val _currentMovie: MutableLiveData<Movie> = MutableLiveData()
-
 
     init {
         getMovieList()
     }
 
     private fun getMovieList() {
-        viewModelScope.launch {
+        _isLoading.value = true
 
-            _isLoading.value = true
+        viewModelScope.launch {
             when (val response = repository.getMovieList(pageNumber)) {
                 is ResponseWrapper.Success -> {
-                    val movies = response.value
+                    val movies = response.value as List<Movie>
                     _moviesList.postValue(movies)
                     _currentMovie.value = movies[0]
                 }
-                else -> _error.postValue(response)
+                else -> onResponseError(response)
             }
             _isLoading.value = false
         }
@@ -50,10 +42,6 @@ class MoviesViewModel(private val repository: MoviesRepository) : ViewModel() {
 
     fun onCurrentMovieChanged(movieIndex: Int) {
         _currentMovie.value = moviesList.value?.get(movieIndex)
-    }
-
-    fun onErrorMsgDisplay() {
-        _error.value = null
     }
 
     class Factory constructor(private val repository: MoviesRepository) :

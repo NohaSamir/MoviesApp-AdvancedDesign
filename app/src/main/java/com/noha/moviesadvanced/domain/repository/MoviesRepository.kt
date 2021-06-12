@@ -4,6 +4,6 @@ import com.noha.moviesadvanced.data.source.network.model.ResponseWrapper
 import com.noha.moviesadvanced.domain.model.Movie
 
 interface MoviesRepository {
-    suspend fun getMovieList(pageNum: Int): ResponseWrapper<List<Movie>>
-    suspend fun getMovieCast(movie: Movie): ResponseWrapper<Movie>
+    suspend fun getMovieList(pageNum: Int): ResponseWrapper<Any>
+    suspend fun getMovieCast(movie: Movie): ResponseWrapper<Any>
 }

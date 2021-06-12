@@ -24,10 +24,10 @@
             android:name="movie"
             app:argType="com.noha.moviesadvanced.domain.model.Movie" />
         <argument
-            android:name="image_one"
+            android:name="prevImage"
             app:argType="string" />
         <argument
-            android:name="image_two"
+            android:name="nextImage"
             app:argType="string" />
     </fragment>
 </navigation>

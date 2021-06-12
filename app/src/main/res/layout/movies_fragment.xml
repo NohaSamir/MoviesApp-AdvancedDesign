@@ -16,7 +16,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/black"
-        tools:context=".presentaion.ui.movieslist.MoviesFragment">
+        tools:context=".presentaion.ui.movieslist.MoviesFragment"
+        app:showSnackBar="@{viewModel.showMessage}">
 
         <ImageView
             android:id="@+id/backgroundImageView"

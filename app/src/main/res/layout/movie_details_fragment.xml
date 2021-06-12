@@ -6,20 +6,12 @@
     <data>
 
         <variable
-            name="imageOneUrl"
-            type="String" />
-
-        <variable
-            name="imageTwoUrl"
-            type="String" />
-
-        <variable
             name="viewModel"
             type="com.noha.moviesadvanced.presentaion.ui.moviedetails.MovieDetailsViewModel" />
     </data>
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
+        showSnackBar="@{viewModel.showMessage}"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/black"
@@ -48,7 +40,7 @@
 
         <ImageView
             android:id="@+id/imageView5"
-            loadImageUrl="@{imageTwoUrl}"
+            loadImageUrl="@{viewModel.nextImage}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
@@ -61,7 +53,7 @@
 
         <ImageView
             android:id="@+id/imageView6"
-            loadImageUrl="@{imageOneUrl}"
+            loadImageUrl="@{viewModel.previousImage}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
